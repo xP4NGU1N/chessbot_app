@@ -1,5 +1,5 @@
 from pgn_processor import pgn_to_fen, select_random_fens, analyze_position
-from girrafe_feature_extraction import extract_giraffe_features
+from utils.giraffe_feature_extraction import extract_giraffe_features
 import os
 import numpy as np
 import chess
