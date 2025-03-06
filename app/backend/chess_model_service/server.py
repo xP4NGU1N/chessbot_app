@@ -35,7 +35,7 @@ def best_move():
     board = chess.Board(fen)
     best_move = get_best_move(model_name, board)
 
-    return jsonify({"fen": fen, "model_name": model_name, "best_move": best_move})
+    return jsonify({"model_name": model_name, "move": best_move})
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=5000) # '0.0.0.0' to broadcast

@@ -26,7 +26,6 @@ def evaluate_position(model_name, board):
         
     elif model_name == "Giraffe with Deepchess" or model_name == "Giraffe with Transformer":
         x = torch.tensor(fen_to_bitboard(board.fen()).reshape(1, -1), dtype=torch.float32)
-        print(x.shape)
         with torch.no_grad():
             return model(x).item()
     
@@ -52,7 +51,7 @@ def get_best_move(model_name, board):
         with torch.no_grad():
             scores = model(X_g, X_p, X_s).squeeze()
         best_idx = torch.argmax(scores).item() if board.turn == chess.WHITE else torch.argmin(scores).item()
-        return legal_moves[best_idx].uci()
+        return board.san(legal_moves[best_idx])
     
     elif model_name == "Giraffe with Deepchess" or model_name == "Giraffe with Transformer":
         giraffe_features = []
@@ -65,6 +64,6 @@ def get_best_move(model_name, board):
         with torch.no_grad():
             scores = model(X).squeeze()
         best_idx = torch.argmax(scores).item() if board.turn == chess.WHITE else torch.argmin(scores).item()
-        return legal_moves[best_idx].uci()
+        return board.san(legal_moves[best_idx])
     
     return None
