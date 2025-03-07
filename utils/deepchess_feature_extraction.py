@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from .pgn_processor import pgn_to_fen_excl_draw
+from pgn_processor import pgn_to_fen_excl_draw
 
 NUM_POSITIONS = 40 # number of positions to extract per game
 MOVES_THRESHOLD = 5 # don't select from the first 5 moves
