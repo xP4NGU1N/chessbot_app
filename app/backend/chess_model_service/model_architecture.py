@@ -67,25 +67,6 @@ class FinalPos2Vec(nn.Module):
             x, _ = encoder(x)
         return x
 
-class GiraffeWithDeepChess(nn.Module):
-    def __init__(self, pos2vec):
-        super(GiraffeWithDeepChess, self).__init__()
-        self.pos2vec = pos2vec
-        for param in self.pos2vec.parameters():
-            param.requires_grad = True
-        self.nn_layers = nn.Sequential(
-            nn.Linear(100, 32),
-            nn.ReLU(),
-            nn.Dropout(0.5),
-            nn.Linear(32, 1),
-            nn.Tanh()
-        )
-
-    def forward(self, x):
-        embedded_feat = self.pos2vec(x)
-        output = self.nn_layers(embedded_feat)
-        return output
-
 class GiraffeWithTransformer(nn.Module):
     def __init__(self, pos2vec, embed_dim=100, num_heads=4, ff_dim=256, num_layers=2, dropout_rate=0.5):
         super(GiraffeWithTransformer, self).__init__()

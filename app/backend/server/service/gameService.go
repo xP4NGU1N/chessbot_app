@@ -22,7 +22,7 @@ func ResetGame() (model.Position, error) {
 	currentGame.AddTagPair("Event", "Local Game")
 	currentGame.AddTagPair("Site", "Local")
 	currentGame.AddTagPair("Date", time.Now().Format("2006.01.02"))
-	startingRating, err := GetEvaluation(currentGame.FEN(), "Giraffe with Deepchess")
+	startingRating, err := GetEvaluation(currentGame.FEN(), "Giraffe")
 	if err != nil {
 		startingRating = 0
 	}

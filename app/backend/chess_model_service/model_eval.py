@@ -1,5 +1,5 @@
 from utils import extract_giraffe_features, split_giraffe_features, fen_to_bitboard
-from model_architecture import GiraffeOriginal, GiraffeWithDeepChess, GiraffeWithTransformer, FinalPos2Vec
+from model_architecture import GiraffeOriginal, GiraffeWithTransformer, FinalPos2Vec
 import chess
 import torch
 
@@ -8,11 +8,9 @@ pos2vec = FinalPos2Vec(layer_sizes)
 pos2vec.load_state_dict(torch.load("models/Pos2Vec_autoencoder.pth", weights_only=True))
 models = {
     "Giraffe": GiraffeOriginal(global_dim=15, piece_dim=208, square_dim=128, global_nodes=12, piece_nodes=64, square_nodes=24, fc_nodes=64, dropout_rate=0.4),
-    "Giraffe with Deepchess": GiraffeWithDeepChess(pos2vec=pos2vec),
     "Giraffe with Transformer": GiraffeWithTransformer(pos2vec=pos2vec)
 }
 models["Giraffe"].load_state_dict(torch.load("models/final_giraffe_model.pth", map_location=torch.device("cpu"), weights_only=True))
-models["Giraffe with Deepchess"].load_state_dict(torch.load("models/integrated_model.pth", map_location=torch.device("cpu"), weights_only=True))
 models["Giraffe with Transformer"].load_state_dict(torch.load("models/transformer_model.pth", map_location=torch.device("cpu"), weights_only=True))
 
 def evaluate_position(model_name, board):
@@ -24,7 +22,7 @@ def evaluate_position(model_name, board):
         with torch.no_grad():
             return model(x_g, x_p, x_s).squeeze().item()
         
-    elif model_name == "Giraffe with Deepchess" or model_name == "Giraffe with Transformer":
+    elif model_name == "Giraffe with Transformer":
         x = torch.tensor(fen_to_bitboard(board.fen()).reshape(1, -1), dtype=torch.float32)
         with torch.no_grad():
             return model(x).item()
@@ -53,7 +51,7 @@ def get_best_move(model_name, board):
         best_idx = torch.argmax(scores).item() if board.turn == chess.WHITE else torch.argmin(scores).item()
         return board.san(legal_moves[best_idx])
     
-    elif model_name == "Giraffe with Deepchess" or model_name == "Giraffe with Transformer":
+    elif model_name == "Giraffe with Transformer":
         giraffe_features = []
         for move in legal_moves:
             board.push(move)

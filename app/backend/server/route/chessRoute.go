@@ -20,7 +20,7 @@ func RegisterRoutes(router *gin.Engine) {
 	router.GET("/export_game", controller.ExportGame)
 	// request: {}
 	// response: { pgn }
-	router.GET("/get_all_positions", controller.GetAllPositions) // more for testing
+	router.GET("/get_all_positions", controller.GetAllPositions) // for testing
 	// request {}
 	// response { positions[] }
 

@@ -1,0 +1,16 @@
+.chessboard-container {
+    width: 600px;
+    margin: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Center the chessboard */
+    position: relative;
+}
+
+#ChessBoard {
+    height: 100%;
+}
+
+.controlButtons {
+    margin-left: 10px;
+}
