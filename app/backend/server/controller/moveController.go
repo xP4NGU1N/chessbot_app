@@ -26,13 +26,16 @@ func MakeMove(c *gin.Context) {
 }
 
 func EvaluatePosition(c *gin.Context) {
-	var unratedPosition model.UnratedPosition
-	if err := c.BindJSON(&unratedPosition); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
-		return
-	}
+    fen := c.DefaultQuery("fen", "")
+    model := c.DefaultQuery("model_name", "")
 
-	updatedPosition, err := service.GetNewEvaluation(unratedPosition.FEN, unratedPosition.Model)
+    // Validate the query parameters
+    if fen == "" || model == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "FEN and model_name are required"})
+        return
+    }
+
+	updatedPosition, err := service.GetNewEvaluation(fen, model)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -42,14 +45,17 @@ func EvaluatePosition(c *gin.Context) {
 }
 
 func GetBestMove(c *gin.Context) {
-	var moveRequest model.UnratedPosition
-	if err := c.BindJSON(&moveRequest); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid JSON"})
-		return
-	}
+    fen := c.DefaultQuery("fen", "")
+    model := c.DefaultQuery("model_name", "")
+
+    // Validate the query parameters
+    if fen == "" || model == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "FEN and model_name are required"})
+        return
+    }
 
 	// get move suggestion from service
-	bestMove, err := service.GetBestMove(moveRequest)
+	bestMove, err := service.GetBestMove(fen, model)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return

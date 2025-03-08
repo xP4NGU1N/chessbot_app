@@ -15,7 +15,7 @@ type PositionRepository struct {
 func NewPositionRepository(startFEN string, startRating float64) *PositionRepository {
 	return &PositionRepository{
 		positions: []model.Position{
-			{FEN: startFEN, Model: "Giraffe with Deepchess", Rating: startRating},
+			{FEN: startFEN, Model: "Giraffe", Rating: startRating},
 		},
 	}
 }

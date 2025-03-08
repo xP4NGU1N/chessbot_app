@@ -9,14 +9,14 @@ import (
 	"chessapp/model"
 )
 
-func GetBestMove(moveRequest model.UnratedPosition) (model.SuggestedMove, error) {
+func GetBestMove(fen string, model_name string) (model.SuggestedMove, error) {
 	// Get best move from Flask
-	move, err := GetBestMoveFromFlask(moveRequest.FEN, moveRequest.Model)
+	move, err := GetBestMoveFromFlask(fen, model_name)
 	if err != nil {
 		return model.SuggestedMove{}, fmt.Errorf("error getting best move: %v", err)
 	}
 	bestMove := model.SuggestedMove{
-		Model:  moveRequest.Model,
+		Model:  model_name,
 		Move:   move,
 	}
 	return bestMove, nil
