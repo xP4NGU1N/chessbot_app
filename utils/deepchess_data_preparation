@@ -1,0 +1,53 @@
+import numpy as np
+import os
+
+# Paths for bitboard and label files
+bitboard_file = "./dataset/deepchess_bitboard_positions.npy"
+label_file = "./dataset/deepchess_labels.npy"
+OUTPUT_FOLDER = "./dataset"
+
+NUM_PAIRS = 2000000
+
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+# Load the bitboard and label data from .npy files
+bitboard_positions = np.load(bitboard_file)
+labels = np.load(label_file)
+
+# Filter positions for white win and black win
+white_win_indices = np.where(labels == 1)[0]
+black_win_indices = np.where(labels == 0)[0]
+
+# Extract sampled positions and labels
+w_positions = bitboard_positions[white_win_indices]
+l_positions = bitboard_positions[black_win_indices]
+
+# Function to generate unique pairs
+def generate_pairs(w_positions, l_positions, num_pairs):
+    pairs = set()
+    while len(pairs) < num_pairs:
+        w_pos = w_positions[np.random.randint(len(w_positions))]
+        l_pos = l_positions[np.random.randint(len(l_positions))]
+        # Randomly decide the order of the pair (W, L) or (L, W)
+        if np.random.rand() > 0.5:
+            pair = (tuple(w_pos.flatten()), tuple(l_pos.flatten()), 1)  # (W, L) -> label = 1
+        else:
+            pair = (tuple(l_pos.flatten()), tuple(w_pos.flatten()), 0)  # (L, W) -> label = 0
+        pairs.add(pair)
+
+    # Convert pairs set to list and format as [position-1, position-2, label]
+    return [(np.array(pair[0]), np.array(pair[1]), np.array(pair[2])) for pair in pairs]
+
+# Generate 2 million unique pairs
+pairs = generate_pairs(w_positions, l_positions, NUM_PAIRS)
+
+# Separate positions and labels
+positions_1 = np.array([pair[0] for pair in pairs])
+positions_2 = np.array([pair[1] for pair in pairs])
+labels = np.array([pair[2] for pair in pairs])
+
+# Save the data as a .npz file
+np.savez(os.path.join(OUTPUT_FOLDER, "deepchess_data.npz"), positions_1=positions_1, positions_2=positions_2, labels=labels)
+
+print(f"Data saved to {os.path.join(OUTPUT_FOLDER, 'deepchess_data.npz')}")
+

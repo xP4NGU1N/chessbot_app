@@ -1,5 +1,5 @@
 from pgn_processor import pgn_to_fen, select_random_fens, analyze_position
-from utils.giraffe_feature_extraction import extract_giraffe_features
+from giraffe_feature_extraction import extract_giraffe_features
 import os
 import numpy as np
 import chess
@@ -32,8 +32,6 @@ for i, fen in enumerate(random_fens):
     # Extract the Giraffe features for the board state
     board = chess.Board(fen)
     # Convert score to range of -1 to 1
-    if board.turn == chess.BLACK:
-        win_prob = 1-win_prob # convert to P(white win)
     win_prob = 2*win_prob-1 # -1 represents black win, 1 represents white win
     features = extract_giraffe_features(board)
     

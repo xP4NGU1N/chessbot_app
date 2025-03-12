@@ -33,8 +33,6 @@ for i, fen in enumerate(random_fens):
     # Extract the features for the board state
     board = chess.Board(fen)
     # Convert score to range of -1 to 1
-    if board.turn == chess.BLACK:
-        win_prob = 1-win_prob # convert to P(white win)
     win_prob = 2*win_prob-1 # -1 represents black win, 1 represents white win
     features = fen_to_bitboard(fen)
 
