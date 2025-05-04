@@ -3,11 +3,16 @@ package route
 import (
 	
 	"github.com/gin-gonic/gin"
+	"net/http"
 	"chessapp/controller"
 )
 
 
 func RegisterRoutes(router *gin.Engine) {
+	router.GET("/status", func(c *gin.Context) {
+		c.String(http.StatusOK, "OK")
+	})
+
 	router.GET("/get_current_position", controller.GetCurrentPosition)
 	// request: {}
 	// response: { fen, model_name, rating }

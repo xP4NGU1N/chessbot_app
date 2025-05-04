@@ -5,6 +5,10 @@ import chess
 
 app = Flask(__name__)
 
+@app.route('/status')
+def health_check():
+    return 'OK', 200
+
 @app.route('/evaluate', methods=['POST'])
 def evaluate():
     data = request.get_json()

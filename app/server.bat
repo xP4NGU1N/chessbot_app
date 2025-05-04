@@ -1,0 +1,6 @@
+@echo off
+echo Starting Flask server...
+start cmd /k "cd backend\chess_model_service && python server.py"
+
+echo Starting Go server...
+start cmd /k "cd backend\server && go run main.go"
